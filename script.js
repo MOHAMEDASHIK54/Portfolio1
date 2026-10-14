@@ -36,6 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 11. Navbar Scroll & Smooth Navigation
   initNavbarScroll();
+
+  // 12. 3D Talking Avatar Video Controller
+  initAvatarVideoController();
+
+  // 13. Instant Gmail Web & Clipboard Handlers
+  initEmailButtons();
 });
 
 // ============================================================
@@ -550,7 +556,7 @@ Available commands:
         triggerConfetti();
         playSound('victory');
         setTimeout(() => {
-          window.location.href = 'mailto:news2ashik@gmail.com?subject=Full-Stack%20Offer%20for%20Mohamed%20Ashik%20M';
+          window.open('https://mail.google.com/mail/?view=cm&fs=1&to=news2ashik@gmail.com&su=Full-Stack%20Offer%20for%20Mohamed%20Ashik%20M', '_blank');
         }, 1800);
         break;
 
@@ -564,7 +570,7 @@ Available commands:
 
       case 'contact':
         response = `
-📧 Email: <a href="mailto:news2ashik@gmail.com" style="color: var(--neon-cyan);">news2ashik@gmail.com</a>
+📧 Email: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=news2ashik@gmail.com&su=Hello%20Mohamed%20Ashik" target="_blank" style="color: var(--neon-cyan);">news2ashik@gmail.com (Click to open Gmail)</a>
 🐙 GitHub: <a href="https://github.com/MOHAMEDASHIK54" target="_blank" style="color: var(--neon-cyan);">github.com/MOHAMEDASHIK54</a>
 💼 Open to relocation: India &amp; Gulf 🌍
 `;
@@ -1087,15 +1093,90 @@ function showToast(msg) {
 }
 
 function handleFormSubmit() {
-  const name = document.getElementById('userName').value;
-  const email = document.getElementById('userEmail').value;
-  const subject = document.getElementById('userSubject').value;
-  const msg = document.getElementById('userMsg').value;
+  const name = document.getElementById('userName').value || 'Visitor';
+  const email = document.getElementById('userEmail').value || 'Not provided';
+  const subject = document.getElementById('userSubject').value || 'Portfolio Contact';
+  const msg = document.getElementById('userMsg').value || '';
 
-  const mailto = `mailto:news2ashik@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Hi Mohamed Ashik,\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`)}`;
+  const bodyContent = `Hi Mohamed Ashik,\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`;
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=news2ashik@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyContent)}`;
 
-  window.open(mailto, '_blank');
-  showToast(`Thank you, ${name}! Your email client is launching 🚀`);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(`To: news2ashik@gmail.com\nSubject: ${subject}\n\n${bodyContent}`).catch(() => {});
+  }
+
+  const win = window.open(gmailUrl, '_blank');
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    window.location.href = `mailto:news2ashik@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyContent)}`;
+  }
+
+  showToast(`Opening Gmail! Message also copied to clipboard 🚀`);
   document.getElementById('contact-form').reset();
-  playSound('beep');
+  if (typeof playSound === 'function') playSound('beep');
 }
+
+// ============================================================
+// 13. 3D TALKING AVATAR VIDEO CONTROLLER
+// ============================================================
+function initAvatarVideoController() {
+  const video = document.getElementById('mascot-video');
+  const img = document.getElementById('mascot-img');
+  const btn = document.getElementById('avatar-video-btn');
+  if (!video || !img || !btn) return;
+
+  // Check if video source loads successfully
+  video.addEventListener('canplay', () => {
+    img.style.display = 'none';
+    video.style.display = 'block';
+    btn.style.display = 'flex';
+  }, { once: true });
+
+  video.addEventListener('error', () => {
+    // If video file is not present, gracefully retain the 3D animated photo
+    img.style.display = 'block';
+    video.style.display = 'none';
+    btn.style.display = 'none';
+  });
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (video.paused) {
+      video.muted = false; // unmute so speech is audible
+      video.play().then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
+        if (typeof playSound === 'function') playSound('beep');
+      }).catch(() => {
+        // Autoplay policy fallback with muted
+        video.muted = true;
+        video.play();
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span>Muted</span>';
+      });
+    } else {
+      video.pause();
+      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Intro</span>';
+      if (typeof playSound === 'function') playSound('click');
+    }
+  });
+
+  video.addEventListener('ended', () => {
+    btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Replay</span>';
+  });
+}
+
+// ============================================================
+// 14. INSTANT GMAIL WEB & CLIPBOARD HANDLER
+// ============================================================
+function initEmailButtons() {
+  const emailBtns = document.querySelectorAll('.email-direct-btn');
+  emailBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText('news2ashik@gmail.com').catch(() => {});
+      }
+      showToast('Opening Gmail! Copied news2ashik@gmail.com to clipboard 📋');
+      if (typeof playSound === 'function') playSound('beep');
+    });
+  });
+}
+
+
