@@ -244,25 +244,26 @@ body {
 
 .text-green { color: var(--neon-green); }
 
-/* FLOATING CYBER HUD BAR */
+/* FLOATING CYBER HUD DOCK */
 .cyber-hud-bar {
   position: fixed;
-  top: 14px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1001;
+  z-index: 999;
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 6px 18px;
-  background: rgba(7, 12, 27, 0.7);
-  backdrop-filter: blur(16px);
+  padding: 8px 22px;
+  background: rgba(7, 12, 27, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--border-neon);
   border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-muted);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 242, 254, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(0, 242, 254, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -342,25 +343,25 @@ body {
   .cyber-hud-bar { display: none; }
 }
 
-/* Navigation Bar */
+/* PERMANENTLY FIXED GLASSMORPHISM NAVIGATION BAR */
 .navbar {
   position: fixed;
-  top: 54px;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+  background: rgba(3, 6, 16, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glass);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
   transition: all 0.3s ease;
 }
 
-@media (max-width: 900px) {
-  .navbar { top: 0; }
-}
-
 .navbar.scrolled {
-  background: rgba(3, 6, 16, 0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-glass);
-  top: 0;
+  background: rgba(3, 6, 16, 0.96);
+  border-bottom-color: var(--border-neon);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), 0 0 18px rgba(0, 242, 254, 0.15);
 }
 
 .nav-container {
