@@ -890,7 +890,7 @@ function initAudioSystem() {
     });
   }
 
-  const hoverables = document.querySelectorAll('[data-hover], .btn, .filter-tab, .quick-cmd-btn');
+  const hoverables = document.querySelectorAll('[data-hover], .btn, .filter-tab, .quick-cmd-btn, .stat-card, .skill-3d-card, .project-3d-card, .philosophy-card-3d');
   hoverables.forEach(item => {
     item.addEventListener('mouseenter', () => playSound('hover'));
   });
@@ -959,15 +959,43 @@ function playSound(type) {
 }
 
 // ============================================================
-// 11. NAVBAR SCROLL & ACTIVE LINK HIGHLIGHT
+// 11. SILKY SMOOTH MOMENTUM SCROLL (Lenis) & NAVBAR
 // ============================================================
+let lenis = null;
+
 function initNavbarScroll() {
   const navbar = document.getElementById('navbar');
   const backToTop = document.getElementById('back-to-top');
 
-  window.addEventListener('scroll', () => {
-    const pos = window.scrollY;
+  // Initialize Lenis Silky Smooth Inertial Momentum Scroll
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.3,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Silky exponential curve
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.4,
+      infinite: false
+    });
 
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    lenis.on('scroll', ({ scroll }) => {
+      handleScrollState(scroll);
+    });
+  } else {
+    window.addEventListener('scroll', () => {
+      handleScrollState(window.scrollY);
+    }, { passive: true });
+  }
+
+  function handleScrollState(pos) {
     if (pos > 50) {
       navbar.classList.add('scrolled');
     } else {
@@ -999,7 +1027,7 @@ function initNavbarScroll() {
         });
       }
     });
-  });
+  }
 
   const toggle = document.getElementById('mobile-toggle');
   const menu = document.getElementById('nav-links');
@@ -1009,6 +1037,7 @@ function initNavbarScroll() {
     });
   }
 
+  // Silky Smooth Anchor Navigation (Lenis Glide)
   const smoothLinks = document.querySelectorAll('a[href^="#"]');
   smoothLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -1017,15 +1046,20 @@ function initNavbarScroll() {
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
           e.preventDefault();
-          const offset = 80;
-          const bodyRect = document.body.getBoundingClientRect().top;
-          const elementRect = targetElement.getBoundingClientRect().top;
-          const offsetPosition = elementRect - bodyRect - offset;
 
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          if (lenis) {
+            lenis.scrollTo(targetElement, { offset: -65, duration: 1.4 });
+          } else {
+            const offset = 65;
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementRect - bodyRect - offset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
 
           if (menu && menu.classList.contains('active')) {
             menu.classList.remove('active');
