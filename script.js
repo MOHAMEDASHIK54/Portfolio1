@@ -522,9 +522,9 @@ Available commands:
       case 'skills':
         response = `
 ⚡ Frontend: React 19, JavaScript (ES6+), Tailwind CSS, Vite, HTML5, CSS3, Figma
-⚙️ Backend: Java, Node.js, Express.js, RESTful APIs, Python
-🗄️ Databases: PostgreSQL, MySQL, MongoDB
-🧰 Tools: Git, GitHub, VS Code, Postman
+⚙️ Backend: Java, Node.js, Express.js, RESTful APIs
+🗄️ Databases: PostgreSQL, MySQL
+🧰 Tools: Git, GitHub, VS Code
 `;
         break;
 
@@ -550,7 +550,7 @@ Available commands:
         triggerConfetti();
         playSound('victory');
         setTimeout(() => {
-          window.location.href = 'mailto:ashikmohamed54@gmail.com?subject=Full-Stack%20Offer%20for%20Mohamed%20Ashik%20M';
+          window.location.href = 'mailto:news2ashik@gmail.com?subject=Full-Stack%20Offer%20for%20Mohamed%20Ashik%20M';
         }, 1800);
         break;
 
@@ -564,7 +564,7 @@ Available commands:
 
       case 'contact':
         response = `
-📧 Email: <a href="mailto:ashikmohamed54@gmail.com" style="color: var(--neon-cyan);">ashikmohamed54@gmail.com</a>
+📧 Email: <a href="mailto:news2ashik@gmail.com" style="color: var(--neon-cyan);">news2ashik@gmail.com</a>
 🐙 GitHub: <a href="https://github.com/MOHAMEDASHIK54" target="_blank" style="color: var(--neon-cyan);">github.com/MOHAMEDASHIK54</a>
 💼 Open to relocation: India &amp; Gulf 🌍
 `;
@@ -1058,7 +1058,7 @@ function handleFormSubmit() {
   const subject = document.getElementById('userSubject').value;
   const msg = document.getElementById('userMsg').value;
 
-  const mailto = `mailto:ashikmohamed54@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Hi Mohamed Ashik,\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`)}`;
+  const mailto = `mailto:news2ashik@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Hi Mohamed Ashik,\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`)}`;
 
   window.open(mailto, '_blank');
   showToast(`Thank you, ${name}! Your email client is launching 🚀`);
