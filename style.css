@@ -930,7 +930,8 @@ body {
   }
 }
 
-.avatar-img {
+.avatar-img,
+.hero-avatar-img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -1243,48 +1244,301 @@ body {
 }
 
 .technologist-3d-card {
-  background: var(--bg-card);
+  background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.22) 0%, rgba(189, 0, 255, 0.12) 42%, transparent 72%),
+              radial-gradient(rgba(0, 242, 254, 0.14) 1px, transparent 1px) 0 0 / 22px 22px,
+              var(--bg-card);
   border: 1px solid var(--border-glass);
   border-radius: 18px;
-  padding: 32px 24px;
+  padding: 38px 24px 28px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   position: relative;
   backdrop-filter: blur(14px);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 35px rgba(0, 242, 254, 0.06);
 }
 
+/* ============================================================
+   FUTURISTIC CYBER CARD BACKGROUND & AMBIENT GLOW
+   ============================================================ */
+.card-cyber-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: radial-gradient(circle at 50% 35%, black 45%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at 50% 35%, black 45%, transparent 85%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-ambient-glow {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 242, 254, 0.25) 0%, rgba(189, 0, 255, 0.18) 40%, transparent 70%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 1;
+  animation: ambientAuraPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes ambientAuraPulse {
+  0% { transform: translate(-50%, -20%) scale(0.9); opacity: 0.6; }
+  100% { transform: translate(-50%, -20%) scale(1.1); opacity: 1; }
+}
+
+/* Corner Cyber Tech Brackets */
+.card-corner-bracket {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(0, 242, 254, 0.65);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 0 4px rgba(0, 242, 254, 0.6));
+}
+.card-corner-bracket.top-left { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.card-corner-bracket.top-right { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+.card-corner-bracket.bottom-left { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+.card-corner-bracket.bottom-right { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+/* ============================================================
+   TOP CYBER HUD LINE & RETICLE DECORATION
+   ============================================================ */
+.card-hud-decor {
+  position: absolute;
+  top: 15px;
+  left: 18px;
+  right: 18px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hud-decor-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.hud-decor-ring {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 242, 254, 0.85);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  position: relative;
+  margin-right: 10px;
+  flex-shrink: 0;
+  animation: rotateRing 14s linear infinite;
+}
+
+.hud-decor-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+  margin-right: 12px;
+  white-space: nowrap;
+}
+
+.hud-decor-line {
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(0, 242, 254, 0.9) 0%, rgba(189, 0, 255, 0.6) 50%, transparent 100%);
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.7);
+}
+
+/* ============================================================
+   3D HOLOGRAPHIC AVATAR STAGE & TECH BACKDROP GEOMETRY
+   ============================================================ */
+.mascot-stage-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px auto 18px auto;
+  perspective: 800px;
+}
+
+/* Concentric Tech Rings & Crosshairs Behind Avatar */
+.tech-backdrop-rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tech-ring-ticks {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 1px dashed rgba(0, 242, 254, 0.35);
+  animation: rotateRing 32s linear infinite;
+}
+
+.tech-hexagon-aura {
+  position: absolute;
+  width: 245px;
+  height: 245px;
+  border-radius: 50%;
+  border: 1px dotted rgba(189, 0, 255, 0.32);
+  animation: rotateRingRev 42s linear infinite;
+}
+
+.tech-crosshair-h {
+  position: absolute;
+  width: 240px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.22) 15%, rgba(0, 242, 254, 0.22) 85%, transparent);
+}
+
+.tech-crosshair-v {
+  position: absolute;
+  height: 240px;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(0, 242, 254, 0.22) 15%, rgba(0, 242, 254, 0.22) 85%, transparent);
+}
+
+/* Floating Micro Telemetry Badges */
+.floating-tech-badge {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(8, 14, 28, 0.88);
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  border-radius: 14px;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+  z-index: 4;
+  pointer-events: none;
+  transition: transform 0.4s ease;
+}
+
+.floating-tech-badge.badge-left {
+  left: -2px;
+  animation: floatBadgeL 4s ease-in-out infinite alternate;
+}
+
+.floating-tech-badge.badge-right {
+  right: -2px;
+  animation: floatBadgeR 4.5s ease-in-out infinite alternate;
+}
+
+.badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.badge-dot.cyan { background: #00f2fe; box-shadow: 0 0 6px #00f2fe; }
+.badge-dot.green { background: #10b981; box-shadow: 0 0 6px #10b981; }
+
+@keyframes floatBadgeL {
+  0% { transform: translateY(-50%) translateY(-3px); }
+  100% { transform: translateY(-50%) translateY(3px); }
+}
+
+@keyframes floatBadgeR {
+  0% { transform: translateY(-50%) translateY(3px); }
+  100% { transform: translateY(-50%) translateY(-3px); }
+}
+
+/* ============================================================
+   3D CYBER HOLOGRAPHIC AVATAR & GLOWING ROTATING RINGS
+   ============================================================ */
 .mascot-hologram {
   position: relative;
-  width: 170px;
-  height: 170px;
-  margin: 0 auto 20px auto;
+  z-index: 3;
+  width: 175px;
+  height: 175px;
+  margin: 6px auto;
   border-radius: 50%;
   padding: 4px;
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.95), rgba(255, 0, 127, 0.85), rgba(127, 0, 255, 0.95));
-  box-shadow: 0 0 35px rgba(0, 242, 254, 0.45), 0 0 70px rgba(255, 0, 127, 0.25);
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.95), rgba(189, 0, 255, 0.95), rgba(255, 0, 127, 0.85));
+  box-shadow: 0 0 35px rgba(0, 242, 254, 0.5), 0 0 70px rgba(189, 0, 255, 0.35);
   animation: floatAvatar 4s ease-in-out infinite alternate;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
 }
 
-.mascot-hologram::before {
-  content: '';
+/* Concentric Neon Cyan & Purple Glowing Rings */
+.hud-ring-inner {
   position: absolute;
-  inset: -6px;
+  inset: -7px;
   border-radius: 50%;
-  border: 2px dashed rgba(0, 242, 254, 0.6);
-  animation: rotateRing 14s linear infinite;
+  border: 2px dashed rgba(0, 242, 254, 0.85);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.6), inset 0 0 8px rgba(0, 242, 254, 0.2);
+  animation: rotateRing 13s linear infinite;
   pointer-events: none;
 }
 
-.mascot-hologram::after {
-  content: '';
+.hud-ring-outer {
   position: absolute;
-  inset: -12px;
+  inset: -15px;
   border-radius: 50%;
-  border: 1px dotted rgba(255, 0, 127, 0.4);
-  animation: rotateRingRev 20s linear infinite;
+  border: 2px dotted rgba(217, 70, 239, 0.8);
+  box-shadow: 0 0 16px rgba(217, 70, 239, 0.5);
+  animation: rotateRingRev 19s linear infinite;
   pointer-events: none;
+}
+
+/* 360-Degree Glowing Radar Sweep */
+.hud-radar-sweep {
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg at 50% 50%, rgba(0, 242, 254, 0.35) 0deg, rgba(0, 242, 254, 0) 55deg, transparent 360deg);
+  animation: rotateRing 3.5s linear infinite;
+  pointer-events: none;
+  z-index: 4;
+  mix-blend-mode: screen;
+  opacity: 0.65;
+}
+
+/* Holographic Vertical Scanline */
+.hud-scanline {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.95), transparent);
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.85);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  animation: scanlinePass 3.2s ease-in-out infinite;
 }
 
 .mascot-3d-img,
@@ -1294,41 +1548,29 @@ body {
   object-fit: cover;
   border-radius: 50%;
   display: block;
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 }
 
-.mascot-hologram:hover .mascot-3d-img,
-.mascot-hologram:hover .mascot-3d-video {
-  transform: scale(1.05);
-  filter: brightness(1.12);
+.technologist-3d-card:hover .mascot-3d-img,
+.technologist-3d-card:hover .mascot-3d-video {
+  transform: scale(1.04);
+  filter: brightness(1.1);
 }
 
-.avatar-play-btn {
-  position: absolute;
-  bottom: 0px;
-  right: -5px;
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
-  color: #0b0f19;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
-  transition: all 0.3s ease;
-  z-index: 10;
+.technologist-3d-card:hover .hud-radar-sweep {
+  opacity: 0.9;
+  animation-duration: 2s;
 }
 
-.avatar-play-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px rgba(255, 0, 127, 0.85);
-  color: #000;
+.technologist-3d-card:hover .hud-ring-inner {
+  border-color: #00f2fe;
+  box-shadow: 0 0 22px rgba(0, 242, 254, 0.9);
+}
+
+.technologist-3d-card:hover .hud-ring-outer {
+  border-color: #ff007f;
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.9);
 }
 
 @keyframes floatAvatar {
@@ -1356,6 +1598,13 @@ body {
   to {
     transform: rotate(0deg);
   }
+}
+
+@keyframes scanlinePass {
+  0% { top: 12px; opacity: 0; }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.9; }
+  100% { top: 155px; opacity: 0; }
 }
 
 .mascot-info-block h3 {

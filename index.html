@@ -247,15 +247,57 @@
           data-tilt-max-glare="0.35">
           <div class="card-glow-edge cyan"></div>
 
-          <div class="mascot-hologram" id="mascot-hologram-wrap">
-            <img src="ashik-3d.jpg" alt="Mohamed Ashik - 3D Cyber Developer" class="mascot-3d-img" id="mascot-img" />
-            <video class="mascot-3d-video" id="mascot-video" loop playsinline style="display: none;">
-              <source src="ashik-intro.mp4" type="video/mp4" />
-            </video>
-            <button class="avatar-play-btn" id="avatar-video-btn" title="Watch 3D Self-Introduction"
-              style="display: none;" aria-label="Play video introduction">
-              <i class="fa-solid fa-play"></i> <span>Intro</span>
-            </button>
+          <!-- Futuristic Cyber Card Background Elements -->
+          <div class="card-cyber-grid" aria-hidden="true"></div>
+          <div class="card-ambient-glow" aria-hidden="true"></div>
+
+          <!-- Top Cyber HUD Line & Reticle Decoration -->
+          <div class="card-hud-decor" aria-hidden="true">
+            <span class="hud-decor-dot"></span>
+            <span class="hud-decor-ring"></span>
+            <span class="hud-decor-label">SYS_ID // 0x7F</span>
+            <span class="hud-decor-line"></span>
+          </div>
+
+          <!-- Corner Cyber Tech Brackets -->
+          <span class="card-corner-bracket top-left" aria-hidden="true"></span>
+          <span class="card-corner-bracket top-right" aria-hidden="true"></span>
+          <span class="card-corner-bracket bottom-left" aria-hidden="true"></span>
+          <span class="card-corner-bracket bottom-right" aria-hidden="true"></span>
+
+          <!-- 3D Holographic Avatar Stage with Background Tech Geometry -->
+          <div class="mascot-stage-container">
+            <!-- Behind Avatar: Tech Hexagon & Crosshair Geometry -->
+            <div class="tech-backdrop-rings" aria-hidden="true">
+              <div class="tech-ring-ticks"></div>
+              <div class="tech-hexagon-aura"></div>
+              <div class="tech-crosshair-h"></div>
+              <div class="tech-crosshair-v"></div>
+            </div>
+
+            <!-- Floating Micro Telemetry Badges -->
+            <div class="floating-tech-badge badge-left" aria-hidden="true">
+              <span class="badge-dot cyan"></span>
+              <span>DEV://CORE</span>
+            </div>
+            <div class="floating-tech-badge badge-right" aria-hidden="true">
+              <span class="badge-dot green"></span>
+              <span>SYNC 99.8%</span>
+            </div>
+
+            <!-- Central Holographic Avatar Frame with Glowing Neon Rings -->
+            <div class="mascot-hologram" id="mascot-hologram-wrap">
+              <div class="hud-ring-outer" aria-hidden="true"></div>
+              <div class="hud-ring-inner" aria-hidden="true"></div>
+              <div class="hud-radar-sweep" aria-hidden="true"></div>
+              <div class="hud-scanline" aria-hidden="true"></div>
+
+              <img src="ashik-3d.jpg" alt="Mohamed Ashik - 3D Cyber Developer" class="mascot-3d-img" id="mascot-img" />
+              <video class="mascot-3d-video" id="mascot-video" loop muted autoplay playsinline style="display: none;">
+                <source src="ashik-intro.mp4" type="video/mp4" />
+                <source src="ashik-intro.mp4.mp4" type="video/mp4" />
+              </video>
+            </div>
           </div>
 
           <div class="mascot-info-block">

@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 11. Navbar Scroll & Smooth Navigation
   initNavbarScroll();
 
-  // 12. 3D Talking Avatar Video Controller
+  // 12. 3D Talking Avatar Video Controller & Cyber Tilt
   initAvatarVideoController();
+  initAvatarTiltInteraction();
 
   // 13. Instant Gmail Web & Clipboard Handlers
   initEmailButtons();
@@ -1116,50 +1117,117 @@ function handleFormSubmit() {
 }
 
 // ============================================================
+// ============================================================
 // 13. 3D TALKING AVATAR VIDEO CONTROLLER
 // ============================================================
 function initAvatarVideoController() {
   const video = document.getElementById('mascot-video');
   const img = document.getElementById('mascot-img');
   const btn = document.getElementById('avatar-video-btn');
-  if (!video || !img || !btn) return;
+  if (!video || !img) return;
 
   // Check if video source loads successfully
   video.addEventListener('canplay', () => {
     img.style.display = 'none';
     video.style.display = 'block';
-    btn.style.display = 'flex';
+    video.muted = true;
+    video.play().catch(() => { });
+    if (btn) btn.style.display = 'flex';
   }, { once: true });
 
   video.addEventListener('error', () => {
     // If video file is not present, gracefully retain the 3D animated photo
     img.style.display = 'block';
     video.style.display = 'none';
-    btn.style.display = 'none';
+    if (btn) btn.style.display = 'none';
   });
 
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (video.paused) {
-      video.muted = false; // unmute so speech is audible
-      video.play().then(() => {
-        btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
-        if (typeof playSound === 'function') playSound('beep');
-      }).catch(() => {
-        // Autoplay policy fallback with muted
-        video.muted = true;
-        video.play();
-        btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span>Muted</span>';
-      });
-    } else {
-      video.pause();
-      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Intro</span>';
-      if (typeof playSound === 'function') playSound('click');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (video.paused) {
+        video.muted = false; // unmute so speech is audible
+        video.play().then(() => {
+          btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
+          if (typeof playSound === 'function') playSound('beep');
+        }).catch(() => {
+          video.muted = true;
+          video.play();
+          btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span>Muted</span>';
+        });
+      } else {
+        video.pause();
+        btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Intro</span>';
+        if (typeof playSound === 'function') playSound('click');
+      }
+    });
+  }
+
+  video.addEventListener('ended', () => {
+    video.currentTime = 0;
+    video.play().catch(() => { });
+  });
+}
+
+// ============================================================
+// 13B. NATURAL HEAD TILT & HOLOGRAPHIC PARALLAX INTERACTION
+// ============================================================
+function initAvatarTiltInteraction() {
+  const card = document.querySelector('.technologist-3d-card');
+  const hologram = document.getElementById('mascot-hologram-wrap');
+  const decorRing = document.querySelector('.hud-decor-ring');
+  const techBackdrop = document.querySelector('.tech-backdrop-rings');
+  const badgeL = document.querySelector('.floating-tech-badge.badge-left');
+  const badgeR = document.querySelector('.floating-tech-badge.badge-right');
+  if (!card || !hologram) return;
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    const rotX = (-y / (rect.height / 2)) * 10;
+    const rotY = (x / (rect.width / 2)) * 10;
+
+    // Subtle 3D perspective on card
+    card.style.transform = `perspective(1000px) rotateX(${rotX * 0.35}deg) rotateY(${rotY * 0.35}deg)`;
+    hologram.style.transform = `perspective(600px) rotateX(${rotX * 0.65}deg) rotateY(${rotY * 0.65}deg) translateZ(10px)`;
+    if (decorRing) decorRing.style.transform = `translate(${rotY * 0.8}px, ${rotX * 0.8}px)`;
+    if (techBackdrop) techBackdrop.style.transform = `translate(${-rotY * 0.5}px, ${-rotX * 0.4}px)`;
+    if (badgeL) badgeL.style.transform = `translateY(-50%) translate(${-rotY * 0.8}px, ${-rotX * 0.5}px)`;
+    if (badgeR) badgeR.style.transform = `translateY(-50%) translate(${-rotY * 0.8}px, ${-rotX * 0.5}px)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    hologram.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    hologram.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    if (decorRing) {
+      decorRing.style.transform = 'translate(0px, 0px)';
+      decorRing.style.transition = 'transform 0.5s ease';
+    }
+    if (techBackdrop) {
+      techBackdrop.style.transform = 'translate(0px, 0px)';
+      techBackdrop.style.transition = 'transform 0.5s ease';
+    }
+    if (badgeL) {
+      badgeL.style.transform = 'translateY(-50%)';
+      badgeL.style.transition = 'transform 0.5s ease';
+    }
+    if (badgeR) {
+      badgeR.style.transform = 'translateY(-50%)';
+      badgeR.style.transition = 'transform 0.5s ease';
     }
   });
 
-  video.addEventListener('ended', () => {
-    btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Replay</span>';
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'none';
+    hologram.style.transition = 'none';
+    if (decorRing) decorRing.style.transition = 'none';
+    if (techBackdrop) techBackdrop.style.transition = 'none';
+    if (badgeL) badgeL.style.transition = 'none';
+    if (badgeR) badgeR.style.transition = 'none';
   });
 }
 
