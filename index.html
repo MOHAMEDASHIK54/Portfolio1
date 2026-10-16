@@ -248,82 +248,25 @@
           <div class="card-glow-edge cyan"></div>
 
           <div class="mascot-hologram-stage" id="mascot-stage">
-            <!-- Futuristic HUD Background Screen (Left): Moving Code Stream -->
-            <div class="hud-screen hud-screen-left" aria-hidden="true">
-              <div class="hud-screen-header">
-                <span class="hud-dot cyan"></span>
-                <span class="hud-title">CORE_SYS.ts</span>
-              </div>
-              <div class="hud-code-track">
-                <div class="hud-code-stream">
-                  <code><span class="tok-kw">const</span> dev = <span class="tok-str">'Ashik'</span>;</code>
-                  <code><span class="tok-kw">await</span> neural.<span class="tok-fn">sync</span>();</code>
-                  <code><span class="tok-fn">waveHello</span>();</code>
-                  <code><span class="tok-kw">while</span>(active) {</code>
-                  <code>  head.<span class="tok-fn">tilt</span>(12);</code>
-                  <code>  eyes.<span class="tok-fn">blink</span>();</code>
-                  <code>  loop.<span class="tok-fn">seamless</span>();</code>
-                  <code>}</code>
-                  <code>hud.<span class="tok-fn">renderCode</span>();</code>
-                  <code><span class="tok-kw">const</span> dev = <span class="tok-str">'Ashik'</span>;</code>
-                  <code><span class="tok-kw">await</span> neural.<span class="tok-fn">sync</span>();</code>
-                  <code><span class="tok-fn">waveHello</span>();</code>
-                </div>
-              </div>
-            </div>
-
-            <!-- Futuristic HUD Background Screen (Right): Telemetry Diagnostics -->
-            <div class="hud-screen hud-screen-right" aria-hidden="true">
-              <div class="hud-screen-header">
-                <span class="hud-dot purple"></span>
-                <span class="hud-title">DIAGNOSTICS</span>
-              </div>
-              <div class="hud-metrics">
-                <div class="hud-metric-row">
-                  <span class="hud-lbl">FPS</span>
-                  <span class="hud-val cyan">60.0</span>
-                </div>
-                <div class="hud-metric-row">
-                  <span class="hud-lbl">RING</span>
-                  <span class="hud-val purple">SYNCED</span>
-                </div>
-                <div class="hud-metric-row">
-                  <span class="hud-lbl">AI LINK</span>
-                  <span class="hud-val green">100%</span>
-                </div>
-                <div class="hud-metric-row">
-                  <span class="hud-lbl">STATUS</span>
-                  <span class="hud-val cyan">LOOPING</span>
-                </div>
-                <div class="hud-bars">
-                  <span class="hud-bar b1"></span>
-                  <span class="hud-bar b2"></span>
-                  <span class="hud-bar b3"></span>
-                  <span class="hud-bar b4"></span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Central Holographic Avatar Frame -->
+            <!-- Central Holographic Avatar Frame with Glowing Neon Rings -->
             <div class="mascot-hologram" id="mascot-hologram-wrap">
-              <!-- Concentric Glowing & Rotating Neon Rings -->
               <div class="hud-ring-outer" aria-hidden="true"></div>
               <div class="hud-ring-inner" aria-hidden="true"></div>
               <div class="hud-radar-sweep" aria-hidden="true"></div>
               <div class="hud-scanline" aria-hidden="true"></div>
-              <div class="hud-bracket top-left" aria-hidden="true"></div>
-              <div class="hud-bracket top-right" aria-hidden="true"></div>
-              <div class="hud-bracket bottom-left" aria-hidden="true"></div>
-              <div class="hud-bracket bottom-right" aria-hidden="true"></div>
 
               <img src="ashik-3d.jpg" alt="Mohamed Ashik - 3D Cyber Developer" class="mascot-3d-img" id="mascot-img" />
-              <video class="mascot-3d-video" id="mascot-video" loop muted autoplay playsinline style="display: none;">
+              <video class="mascot-3d-video" id="mascot-video" loop playsinline style="display: none;">
                 <source src="ashik-intro.mp4" type="video/mp4" />
               </video>
-              <button class="avatar-play-btn" id="avatar-video-btn" title="Toggle 3D Video Audio"
-                style="display: none;" aria-label="Toggle 3D Video Audio">
-                <i class="fa-solid fa-play"></i> <span>Intro</span>
+              <button class="avatar-play-btn" id="avatar-video-btn" title="Hear Mohamed Ashik's Introduction"
+                aria-label="Hear Mohamed Ashik's Introduction">
+                <i class="fa-solid fa-volume-high"></i> <span>Play Intro</span>
               </button>
+            </div>
+            <!-- Speech Subtitle Pill (Appears when intro speaks) -->
+            <div class="avatar-speech-bubble" id="avatar-speech" style="display: none;">
+              <span class="speech-typing" id="speech-text"></span>
             </div>
           </div>
 

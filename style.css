@@ -1257,171 +1257,26 @@ body {
 }
 
 /* ============================================================
-   3D CYBER HOLOGRAPHIC AVATAR & HUD SCREEN SUITE
+   3D CYBER HOLOGRAPHIC AVATAR & GLOWING ROTATING RINGS
    ============================================================ */
 .mascot-hologram-stage {
   position: relative;
   width: 100%;
-  max-width: 320px;
-  min-height: 210px;
-  margin: 0 auto 24px auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 0 auto 20px auto;
   perspective: 1000px;
-}
-
-/* Background HUD Screen Windows */
-.hud-screen {
-  position: absolute;
-  top: 15px;
-  background: rgba(8, 14, 28, 0.78);
-  border: 1px solid rgba(0, 242, 254, 0.35);
-  border-radius: 8px;
-  backdrop-filter: blur(8px);
-  padding: 8px 10px;
-  font-family: var(--font-mono, monospace);
-  font-size: 10px;
-  line-height: 1.45;
-  color: rgba(220, 245, 255, 0.85);
-  box-shadow: 0 0 20px rgba(0, 242, 254, 0.15), inset 0 0 12px rgba(0, 242, 254, 0.05);
-  pointer-events: none;
-  z-index: 1;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-}
-
-.hud-screen-left {
-  left: -8px;
-  width: 112px;
-  height: 140px;
-  overflow: hidden;
-  border-left: 2px solid var(--neon-cyan, #00f2fe);
-}
-
-.hud-screen-right {
-  right: -8px;
-  top: 25px;
-  width: 108px;
-  height: 125px;
-  border-right: 2px solid #bd00ff;
-  border-color: rgba(189, 0, 255, 0.35);
-  box-shadow: 0 0 20px rgba(189, 0, 255, 0.15), inset 0 0 12px rgba(189, 0, 255, 0.05);
-}
-
-.hud-screen-header {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding-bottom: 5px;
-  margin-bottom: 6px;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.hud-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  box-shadow: 0 0 6px currentColor;
-}
-.hud-dot.cyan { background: #00f2fe; color: #00f2fe; }
-.hud-dot.purple { background: #bd00ff; color: #bd00ff; }
-
-/* Moving Code Stream in Background HUD */
-.hud-code-track {
-  height: 105px;
-  overflow: hidden;
-  position: relative;
-  mask-image: linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%);
-}
-
-.hud-code-stream {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  animation: hudCodeScroll 9s linear infinite;
-}
-
-.hud-code-stream code {
-  font-family: var(--font-mono, monospace);
-  font-size: 8.5px;
-  white-space: nowrap;
-  letter-spacing: -0.2px;
-}
-
-.tok-kw { color: #ff007f; font-weight: 600; }
-.tok-str { color: #00ffaa; }
-.tok-fn { color: #00f2fe; }
-
-@keyframes hudCodeScroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
-}
-
-/* Right HUD Telemetry */
-.hud-metrics {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.hud-metric-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 8.5px;
-}
-
-.hud-lbl {
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-}
-
-.hud-val {
-  font-weight: 700;
-  font-size: 9px;
-}
-.hud-val.cyan { color: #00f2fe; text-shadow: 0 0 8px rgba(0, 242, 254, 0.6); }
-.hud-val.purple { color: #d946ef; text-shadow: 0 0 8px rgba(217, 70, 239, 0.6); }
-.hud-val.green { color: #10b981; text-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
-
-/* Animated Signal Equalizer Bars */
-.hud-bars {
-  display: flex;
-  gap: 3px;
-  align-items: flex-end;
-  height: 16px;
-  margin-top: 6px;
-  padding-top: 3px;
-}
-
-.hud-bar {
-  flex: 1;
-  background: linear-gradient(180deg, #bd00ff, #00f2fe);
-  border-radius: 2px;
-  animation: hudBarPulse 1.4s ease-in-out infinite alternate;
-}
-.hud-bar.b1 { height: 40%; animation-delay: 0.1s; }
-.hud-bar.b2 { height: 85%; animation-delay: 0.3s; }
-.hud-bar.b3 { height: 60%; animation-delay: 0.2s; }
-.hud-bar.b4 { height: 95%; animation-delay: 0.45s; }
-
-@keyframes hudBarPulse {
-  0% { transform: scaleY(0.4); opacity: 0.6; }
-  100% { transform: scaleY(1); opacity: 1; filter: drop-shadow(0 0 6px #00f2fe); }
 }
 
 /* Central Circular Avatar Frame */
 .mascot-hologram {
   position: relative;
   z-index: 3;
-  width: 175px;
-  height: 175px;
-  margin: 0;
+  width: 180px;
+  height: 180px;
+  margin: 12px auto;
   border-radius: 50%;
   padding: 4px;
   background: linear-gradient(135deg, rgba(0, 242, 254, 0.95), rgba(189, 0, 255, 0.95), rgba(255, 0, 127, 0.85));
@@ -1434,21 +1289,21 @@ body {
 /* Concentric Neon Cyan & Purple Glowing Rings */
 .hud-ring-inner {
   position: absolute;
-  inset: -7px;
+  inset: -8px;
   border-radius: 50%;
-  border: 2px dashed rgba(0, 242, 254, 0.85);
-  box-shadow: 0 0 12px rgba(0, 242, 254, 0.6), inset 0 0 8px rgba(0, 242, 254, 0.2);
-  animation: rotateHudRing 13s linear infinite;
+  border: 2px dashed rgba(0, 242, 254, 0.9);
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.6), inset 0 0 10px rgba(0, 242, 254, 0.25);
+  animation: rotateHudRing 12s linear infinite;
   pointer-events: none;
 }
 
 .hud-ring-outer {
   position: absolute;
-  inset: -15px;
+  inset: -16px;
   border-radius: 50%;
-  border: 2px dotted rgba(217, 70, 239, 0.8);
-  box-shadow: 0 0 16px rgba(217, 70, 239, 0.5);
-  animation: rotateHudRingRev 19s linear infinite;
+  border: 2px dotted rgba(217, 70, 239, 0.85);
+  box-shadow: 0 0 20px rgba(217, 70, 239, 0.5);
+  animation: rotateHudRingRev 18s linear infinite;
   pointer-events: none;
 }
 
@@ -1457,12 +1312,12 @@ body {
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg at 50% 50%, rgba(0, 242, 254, 0.35) 0deg, rgba(0, 242, 254, 0) 55deg, transparent 360deg);
+  background: conic-gradient(from 0deg at 50% 50%, rgba(0, 242, 254, 0.4) 0deg, rgba(0, 242, 254, 0) 60deg, transparent 360deg);
   animation: rotateHudRing 3.5s linear infinite;
   pointer-events: none;
   z-index: 4;
   mix-blend-mode: screen;
-  opacity: 0.65;
+  opacity: 0.7;
 }
 
 /* Holographic Vertical Scanline */
@@ -1479,21 +1334,42 @@ body {
   animation: scanlinePass 3.2s ease-in-out infinite;
 }
 
-/* Futuristic Corner Target Brackets */
-.hud-bracket {
+/* Interactive Speech Bubble when Avatar Speaks */
+.avatar-speech-bubble {
+  margin-top: 14px;
+  background: rgba(10, 18, 34, 0.92);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  color: #e2e8f0;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+  animation: speechPop 0.3s var(--ease-spring);
+  position: relative;
+  z-index: 5;
+}
+
+.avatar-speech-bubble::before {
+  content: '';
   position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
   width: 10px;
   height: 10px;
-  border-color: rgba(0, 242, 254, 0.85);
-  border-style: solid;
-  pointer-events: none;
-  z-index: 6;
-  filter: drop-shadow(0 0 4px #00f2fe);
+  background: rgba(10, 18, 34, 0.95);
+  border-left: 1px solid var(--neon-cyan);
+  border-top: 1px solid var(--neon-cyan);
 }
-.hud-bracket.top-left { top: -20px; left: -20px; border-width: 2px 0 0 2px; }
-.hud-bracket.top-right { top: -20px; right: -20px; border-width: 2px 2px 0 0; }
-.hud-bracket.bottom-left { bottom: -20px; left: -20px; border-width: 0 0 2px 2px; }
-.hud-bracket.bottom-right { bottom: -20px; right: -20px; border-width: 0 2px 2px 0; }
+
+@keyframes speechPop {
+  0% { opacity: 0; transform: translateY(-8px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
 
 .mascot-3d-img,
 .mascot-3d-video {

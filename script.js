@@ -1117,59 +1117,130 @@ function handleFormSubmit() {
 }
 
 // ============================================================
-// 13. 3D TALKING AVATAR VIDEO CONTROLLER
+// 13. 3D TALKING AVATAR VIDEO & VOICE CONTROLLER
 // ============================================================
 function initAvatarVideoController() {
   const video = document.getElementById('mascot-video');
   const img = document.getElementById('mascot-img');
   const btn = document.getElementById('avatar-video-btn');
-  if (!video || !img || !btn) return;
+  const speechBubble = document.getElementById('avatar-speech');
+  const speechText = document.getElementById('speech-text');
+  const hologram = document.getElementById('mascot-hologram-wrap');
+  if (!img || !btn) return;
 
-  // Check if video source loads successfully
-  video.addEventListener('canplay', () => {
-    img.style.display = 'none';
-    video.style.display = 'block';
-    btn.style.display = 'flex';
-    // Start muted for guaranteed seamless autoplay
-    video.muted = true;
-    video.play().then(() => {
-      btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Audio</span>';
-    }).catch(() => {
-      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
+  const speechIntroText = "Hi, I'm Mohamed Ashik, a Full Stack Developer. I build modern web applications with Java and React. Welcome to my portfolio!";
+  let hasVideo = false;
+  let isSpeaking = false;
+
+  // Make button visible immediately
+  btn.style.display = 'flex';
+
+  if (video) {
+    video.addEventListener('canplay', () => {
+      hasVideo = true;
+      img.style.display = 'none';
+      video.style.display = 'block';
+      video.muted = true;
+      video.play().then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Audio</span>';
+      }).catch(() => {
+        btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
+      });
+    }, { once: true });
+
+    video.addEventListener('error', () => {
+      hasVideo = false;
+      img.style.display = 'block';
+      video.style.display = 'none';
+      btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Play Intro</span>';
     });
-  }, { once: true });
 
-  video.addEventListener('error', () => {
-    // If video file is not present, gracefully retain the 3D animated photo
-    img.style.display = 'block';
-    video.style.display = 'none';
-    btn.style.display = 'none';
-  });
+    video.addEventListener('ended', () => {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    });
+  }
 
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (video.paused) {
-      video.play().then(() => {
-        btn.innerHTML = video.muted
-          ? '<i class="fa-solid fa-volume-high"></i> <span>Audio</span>'
-          : '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
-        if (typeof playSound === 'function') playSound('beep');
-      }).catch(() => {});
-    } else if (video.muted) {
-      video.muted = false;
-      btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
-      if (typeof playSound === 'function') playSound('beep');
-    } else {
-      video.pause();
-      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
-      if (typeof playSound === 'function') playSound('click');
-    }
-  });
 
-  video.addEventListener('ended', () => {
-    // Seamless loop fallback
-    video.currentTime = 0;
-    video.play().catch(() => {});
+    // 1. If video file (ashik-intro.mp4) is present, toggle video play / mute
+    if (hasVideo && video) {
+      if (video.paused) {
+        video.play().then(() => {
+          btn.innerHTML = video.muted
+            ? '<i class="fa-solid fa-volume-high"></i> <span>Audio</span>'
+            : '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
+          if (typeof playSound === 'function') playSound('beep');
+        }).catch(() => {});
+      } else if (video.muted) {
+        video.muted = false;
+        btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
+        if (typeof playSound === 'function') playSound('beep');
+      } else {
+        video.pause();
+        btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
+        if (typeof playSound === 'function') playSound('click');
+      }
+      return;
+    }
+
+    // 2. If ashik-intro.mp4 is not yet generated, speak intro via Web Speech Synthesis
+    if ('speechSynthesis' in window) {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        if (speechBubble) speechBubble.style.display = 'none';
+        if (hologram) hologram.style.boxShadow = '';
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Play Intro</span>';
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(speechIntroText);
+      utter.rate = 1.0;
+      utter.pitch = 1.05;
+
+      const voices = window.speechSynthesis.getVoices();
+      const naturalVoice = voices.find(v => v.lang && v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Male')));
+      if (naturalVoice) utter.voice = naturalVoice;
+
+      utter.onstart = () => {
+        isSpeaking = true;
+        btn.innerHTML = '<i class="fa-solid fa-stop"></i> <span>Stop Voice</span>';
+        if (speechBubble && speechText) {
+          speechBubble.style.display = 'block';
+          speechText.textContent = speechIntroText;
+        }
+        if (hologram) {
+          hologram.style.boxShadow = '0 0 50px rgba(0, 242, 254, 0.85), 0 0 100px rgba(189, 0, 255, 0.6)';
+        }
+        if (typeof playSound === 'function') playSound('beep');
+      };
+
+      utter.onend = () => {
+        isSpeaking = false;
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Play Intro</span>';
+        if (speechBubble) {
+          setTimeout(() => { if (!isSpeaking) speechBubble.style.display = 'none'; }, 2000);
+        }
+        if (hologram) hologram.style.boxShadow = '';
+      };
+
+      utter.onerror = () => {
+        isSpeaking = false;
+        btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Play Intro</span>';
+        if (speechBubble) speechBubble.style.display = 'none';
+        if (hologram) hologram.style.boxShadow = '';
+      };
+
+      window.speechSynthesis.speak(utter);
+    } else {
+      if (speechBubble && speechText) {
+        speechBubble.style.display = 'block';
+        speechText.textContent = speechIntroText;
+      }
+    }
   });
 }
 
@@ -1179,8 +1250,6 @@ function initAvatarVideoController() {
 function initAvatarTiltInteraction() {
   const card = document.querySelector('.technologist-3d-card');
   const hologram = document.getElementById('mascot-hologram-wrap');
-  const screenLeft = document.querySelector('.hud-screen-left');
-  const screenRight = document.querySelector('.hud-screen-right');
   if (!card || !hologram) return;
 
   card.addEventListener('mousemove', (e) => {
@@ -1188,18 +1257,12 @@ function initAvatarTiltInteraction() {
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
 
-    const rotX = (-y / (rect.height / 2)) * 12;
-    const rotY = (x / (rect.width / 2)) * 12;
+    const rotX = (-y / (rect.height / 2)) * 10;
+    const rotY = (x / (rect.width / 2)) * 10;
 
-    // Subtle 3D card perspective
-    card.style.transform = `perspective(1000px) rotateX(${rotX * 0.4}deg) rotateY(${rotY * 0.4}deg)`;
-
-    // Mascot head tilt towards camera / cursor
-    hologram.style.transform = `perspective(600px) rotateX(${rotX * 0.7}deg) rotateY(${rotY * 0.7}deg) translateZ(12px)`;
-
-    // Background HUD parallax
-    if (screenLeft) screenLeft.style.transform = `translate(${-rotY * 1.2}px, ${-rotX * 0.8}px) translateZ(-8px)`;
-    if (screenRight) screenRight.style.transform = `translate(${-rotY * 0.8}px, ${-rotX * 0.6}px) translateZ(-4px)`;
+    // Subtle 3D perspective
+    card.style.transform = `perspective(1000px) rotateX(${rotX * 0.3}deg) rotateY(${rotY * 0.3}deg)`;
+    hologram.style.transform = `perspective(600px) rotateX(${rotX * 0.6}deg) rotateY(${rotY * 0.6}deg) translateZ(8px)`;
   });
 
   card.addEventListener('mouseleave', () => {
@@ -1207,21 +1270,11 @@ function initAvatarTiltInteraction() {
     card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
     hologram.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
     hologram.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-    if (screenLeft) {
-      screenLeft.style.transform = 'translate(0px, 0px)';
-      screenLeft.style.transition = 'transform 0.5s ease';
-    }
-    if (screenRight) {
-      screenRight.style.transform = 'translate(0px, 0px)';
-      screenRight.style.transition = 'transform 0.5s ease';
-    }
   });
 
   card.addEventListener('mouseenter', () => {
     card.style.transition = 'none';
     hologram.style.transition = 'none';
-    if (screenLeft) screenLeft.style.transition = 'none';
-    if (screenRight) screenRight.style.transition = 'none';
   });
 }
 
