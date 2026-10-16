@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 11. Navbar Scroll & Smooth Navigation
   initNavbarScroll();
 
-  // 12. 3D Talking Avatar Video Controller
+  // 12. 3D Talking Avatar Video Controller & Cyber Tilt
   initAvatarVideoController();
+  initAvatarTiltInteraction();
 
   // 13. Instant Gmail Web & Clipboard Handlers
   initEmailButtons();
@@ -1129,6 +1130,13 @@ function initAvatarVideoController() {
     img.style.display = 'none';
     video.style.display = 'block';
     btn.style.display = 'flex';
+    // Start muted for guaranteed seamless autoplay
+    video.muted = true;
+    video.play().then(() => {
+      btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span>Audio</span>';
+    }).catch(() => {
+      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
+    });
   }, { once: true });
 
   video.addEventListener('error', () => {
@@ -1141,25 +1149,79 @@ function initAvatarVideoController() {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (video.paused) {
-      video.muted = false; // unmute so speech is audible
       video.play().then(() => {
-        btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
+        btn.innerHTML = video.muted
+          ? '<i class="fa-solid fa-volume-high"></i> <span>Audio</span>'
+          : '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
         if (typeof playSound === 'function') playSound('beep');
-      }).catch(() => {
-        // Autoplay policy fallback with muted
-        video.muted = true;
-        video.play();
-        btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span>Muted</span>';
-      });
+      }).catch(() => {});
+    } else if (video.muted) {
+      video.muted = false;
+      btn.innerHTML = '<i class="fa-solid fa-pause"></i> <span>Pause</span>';
+      if (typeof playSound === 'function') playSound('beep');
     } else {
       video.pause();
-      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Intro</span>';
+      btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
       if (typeof playSound === 'function') playSound('click');
     }
   });
 
   video.addEventListener('ended', () => {
-    btn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span>Replay</span>';
+    // Seamless loop fallback
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  });
+}
+
+// ============================================================
+// 13B. NATURAL HEAD TILT & HOLOGRAPHIC PARALLAX INTERACTION
+// ============================================================
+function initAvatarTiltInteraction() {
+  const card = document.querySelector('.technologist-3d-card');
+  const hologram = document.getElementById('mascot-hologram-wrap');
+  const screenLeft = document.querySelector('.hud-screen-left');
+  const screenRight = document.querySelector('.hud-screen-right');
+  if (!card || !hologram) return;
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    const rotX = (-y / (rect.height / 2)) * 12;
+    const rotY = (x / (rect.width / 2)) * 12;
+
+    // Subtle 3D card perspective
+    card.style.transform = `perspective(1000px) rotateX(${rotX * 0.4}deg) rotateY(${rotY * 0.4}deg)`;
+
+    // Mascot head tilt towards camera / cursor
+    hologram.style.transform = `perspective(600px) rotateX(${rotX * 0.7}deg) rotateY(${rotY * 0.7}deg) translateZ(12px)`;
+
+    // Background HUD parallax
+    if (screenLeft) screenLeft.style.transform = `translate(${-rotY * 1.2}px, ${-rotX * 0.8}px) translateZ(-8px)`;
+    if (screenRight) screenRight.style.transform = `translate(${-rotY * 0.8}px, ${-rotX * 0.6}px) translateZ(-4px)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    hologram.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    hologram.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    if (screenLeft) {
+      screenLeft.style.transform = 'translate(0px, 0px)';
+      screenLeft.style.transition = 'transform 0.5s ease';
+    }
+    if (screenRight) {
+      screenRight.style.transform = 'translate(0px, 0px)';
+      screenRight.style.transition = 'transform 0.5s ease';
+    }
+  });
+
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'none';
+    hologram.style.transition = 'none';
+    if (screenLeft) screenLeft.style.transition = 'none';
+    if (screenRight) screenRight.style.transition = 'none';
   });
 }
 
